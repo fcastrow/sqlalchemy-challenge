@@ -12,6 +12,8 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func, text
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
@@ -19,13 +21,12 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
-
 # Save references to each table
 Measurement = Base.classes.measurement
 Station = Base.classes.station
-
 # Create our session (link) from Python to the DB
-session = Session(engine)
+#session = Session(engine)
+session = scoped_session(sessionmaker(bind=engine))
 
 #populate data frames
 results = session.query(Station.id, Station.station, Station.name, Station.latitude, Station.longitude, Station.elevation).all()
@@ -94,8 +95,8 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def start(start):
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
-    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start)
-   d = {}
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= start)
+    d = {}
     for i in measurements_df['id']:
         i -= 1
         d[i] = {
@@ -109,8 +110,8 @@ def start(start):
 @app.route("/api/v1.0/<start>/<end>")
 def start_end(start,end):
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
-    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start).filter(date <=end)
-   d = {}
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= start).filter('date' <=end)
+    d = {}
     for i in measurements_df['id']:
         i -= 1
         d[i] = {
