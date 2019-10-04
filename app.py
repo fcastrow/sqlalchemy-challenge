@@ -48,11 +48,11 @@ def precipatation():
     for i in measurements_df['id']:
         i -= 1
         d[i] = {
-                'id': int(measurements_df['id'][i]),
-                'station': measurements_df['station'][i],
+                #'id': int(measurements_df['id'][i]),
+                #'station': measurements_df['station'][i],
                 'date': measurements_df['date'][i],
-                'prcp': measurements_df['prcp'][i],
-                'tobs': measurements_df['tobs'][i]
+                'prcp': measurements_df['prcp'][i]
+                #'tobs': measurements_df['tobs'][i]
         }
     return jsonify(d)
 
@@ -73,7 +73,17 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
-    return "tobs"
+    d = {}
+    for i in measurements_df['id']:
+        i -= 1
+        d[i] = {
+                #'id': int(measurements_df['id'][i]),
+                #'station': measurements_df['station'][i],
+                'date': measurements_df['date'][i],
+                #'prcp': measurements_df['prcp'][i],
+                'tobs': measurements_df['tobs'][i]
+        }
+    return jsonify(d)
 
 @app.route("/api/v1.0/<start>")
 def start():
