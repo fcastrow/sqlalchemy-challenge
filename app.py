@@ -1,3 +1,13 @@
+#Copyright © 2019 by Castrow, L.L.C.
+
+#All rights reserved. 
+#No part of this publication may be reproduced, distributed, or transmitted in any form or by any means, 
+#including photocopying, recording, or other electronic or mechanical methods.
+
+#WARNING: Used without permission, this code could cause catrastophic events to occur.
+#         You have been warned.
+
+
 #import the usual suspects
 #%matplotlib inline
 from matplotlib import style
