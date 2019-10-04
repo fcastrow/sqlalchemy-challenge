@@ -92,7 +92,7 @@ def tobs():
     return jsonify(d)
 
 @app.route("/api/v1.0/<start>")
-def start():
+def start(start):
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
     measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start)
    d = {}
@@ -107,7 +107,7 @@ def start():
         }
 
 @app.route("/api/v1.0/<start>/<end>")
-def start_end():
+def start_end(start,end):
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
     measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start).filter(date <=end)
    d = {}
