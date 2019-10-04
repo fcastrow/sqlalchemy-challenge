@@ -94,8 +94,9 @@ def tobs():
 
 @app.route("/api/v1.0/<start>")
 def start(start):
+
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
-    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= start)
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= dt.datetime.strptime(start, "%Y-%m-%d").date())
     d = {}
     for i in measurements_df['id']:
         i -= 1
@@ -110,7 +111,7 @@ def start(start):
 @app.route("/api/v1.0/<start>/<end>")
 def start_end(start,end):
     results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
-    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= start).filter('date' <=end)
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter('date' >= dt.datetime.strptime(start, "%Y-%m-%d").date()).filter('date' <= dt.datetime.strptime(end, "%Y-%m-%d").date())
     d = {}
     for i in measurements_df['id']:
         i -= 1
