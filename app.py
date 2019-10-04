@@ -83,15 +83,43 @@ def tobs():
                 #'prcp': measurements_df['prcp'][i],
                 'tobs': measurements_df['tobs'][i]
         }
+
+#I can do this with regular SQL
+#I haven't found the SQLAlchemy syntax to accomplish the same thing
+# sql_statement  = "select tobs, count(*) 'frequency' from Measurement m "
+# sql_statement += "where date > (select Date(Max(date), '-1 year') from Measurement m) "
+        
     return jsonify(d)
 
 @app.route("/api/v1.0/<start>")
 def start():
-    return "start"
+    results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start)
+   d = {}
+    for i in measurements_df['id']:
+        i -= 1
+        d[i] = {
+                #'id': int(measurements_df['id'][i]),
+                #'station': measurements_df['station'][i],
+                'date': measurements_df['date'][i],
+                #'prcp': measurements_df['prcp'][i],
+                'tobs': measurements_df['tobs'][i]
+        }
 
 @app.route("/api/v1.0/<start>/<end>")
 def start_end():
-    return "start_end"
+    results = session.query(Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs).all()
+    measurements_df = pd.DataFrame(results, columns=['id', 'station', 'date', 'prcp', 'tobs']).filter(date >= start).filter(date <=end)
+   d = {}
+    for i in measurements_df['id']:
+        i -= 1
+        d[i] = {
+                #'id': int(measurements_df['id'][i]),
+                #'station': measurements_df['station'][i],
+                'date': measurements_df['date'][i],
+                #'prcp': measurements_df['prcp'][i],
+                'tobs': measurements_df['tobs'][i]
+        }
 
 if __name__ == "__main__":
     app.run(debug=True)
